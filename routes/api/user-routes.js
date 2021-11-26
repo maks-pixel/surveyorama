@@ -1,6 +1,12 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
+const initializePassport = require('../../config/passport')
+initializePassport(
+    passport, 
+    email => users.find(user => user.email === email)
+)
+
 // GET /api/users
 router.get('/', (req, res) => {
     User.findAll({
@@ -35,7 +41,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/users
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
     //hashing the password using bcrypt
     // const hashedPassword = await bcrypt.hash(req.body.password, 10)
     User.create({
@@ -50,16 +56,16 @@ router.post('/', async (req, res) => {
         });
 });
 
+
 // PUT /api/users/1
 router.put('/:id', (req, res) => {
-    // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
 
-    // if req.body has exact key/value pairs to match the model, you can just use `req.body` instead
     User.update(req.body, {
+        individualHooks: true,
         where: {
-            id: req.params.id
+          id: req.params.id
         }
-    })
+      })
         .then(dbUserData => {
             if (!dbUserData[0]) {
                 res.status(404).json({ message: 'No user found with this id' });
