@@ -45,7 +45,9 @@ router.get('/', (req, res) => {
     .then(dbSurveyData => {
         // serialize data
         const surveys = dbSurveyData.map(survey => survey.get({ plain: true }));
-        const user = req.session.username;
+        const user = {
+            username: req.session.username
+        }
         res.render('dashboard', { user, surveys, loggedIn: true });
     })
     .catch(err => {
