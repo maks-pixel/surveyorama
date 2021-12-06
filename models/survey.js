@@ -4,7 +4,7 @@ const sequelize = require("../config/connection")
 class Survey extends Model{
 
 }
-//survey model for database
+
 Survey.init(
     {
         id: {
